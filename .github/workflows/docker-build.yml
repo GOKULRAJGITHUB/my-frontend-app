@@ -30,4 +30,4 @@ jobs:
           tags: |
             gokulrajhub/my-frontend-app:latest
             gokulrajhub/my-frontend-app:${{ steps.vars.outputs.version }}
-            gokulrajhub/my-frontend-app:${{ steps.vars.outputs.sha_short }}
+            
