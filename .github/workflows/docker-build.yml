@@ -30,4 +30,20 @@ jobs:
           tags: |
             gokulrajhub/my-frontend-app:latest
             gokulrajhub/my-frontend-app:${{ steps.vars.outputs.version }}
-            
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull gokulrajhub/my-frontend-app:latest
+            docker stop my-frontend-app || true
+            docker rm my-frontend-app || true
+            docker run -d --name my-frontend-app -p 80:80 gokulrajhub/my-frontend-app:latest
+            docker ps | grep my-frontend-app
